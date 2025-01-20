@@ -2,6 +2,9 @@ package com.example.qrcodescannerapp
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Color.BLUE
+import android.graphics.Paint
 import android.os.Bundle
 import android.util.Size
 import android.widget.TextView
@@ -108,17 +111,39 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleBarcode(barcode: Barcode){
+//    private fun handleBarcode(barcode: Barcode){
+//        val url = barcode.url?.url ?: barcode.displayValue
+//        if(url != null){
+//            resultTextView.text = url
+//            resultTextView.setOnClickListener{
+//                val intent = Intent(this, WebVIewActivity::class.java)
+//                intent.putExtra("url", url)
+//                startActivity(intent)
+//            }
+//        } else {
+//            resultTextView.text = "No QR code Detected"
+//        }
+//    }
+
+    private fun handleBarcode(barcode: Barcode) {
         val url = barcode.url?.url ?: barcode.displayValue
-        if(url != null){
-            resultTextView.text = url
-            resultTextView.setOnClickListener{
-                val intent = Intent(this, WebVIewActivity::class.java)
-                intent.putExtra("url", url)
-                startActivity(intent)
+        if (url != null) {
+            resultTextView.apply {
+                text = url
+                setTextColor(Color.BLUE) // Set text color to blue
+                paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG // Add underline
+                setOnClickListener {
+                    val intent = Intent(this@MainActivity, WebVIewActivity::class.java)
+                    intent.putExtra("url", url)
+                    startActivity(intent)
+                }
             }
         } else {
-            resultTextView.text = "No QR code Detected"
+            resultTextView.apply {
+                text = "No QR code Detected"
+                setTextColor(Color.BLACK) // Reset to default color
+                paintFlags = 0 // Remove underline
+            }
         }
     }
 
